@@ -2,12 +2,12 @@
 //     alert(request)
 // }
 
-const red_link = ""//"https://render.fineartamerica.com/images/rendered/default/print/8.000/6.750/break/images/artworkimages/medium/1/troll-face-jeffrey-wong.jpg"
-const ua = "Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16";
-const is_del = 0
-const frame_value = "deny"
+const red_link = ""//"https://render.fineartamerica.com/images/rendered/default/print/8.000/6.750/break/images/artworkimages/medium/1/troll-face-jeffrey-wong.jpg" //<-- redirect all url to this
+const ua = "Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16"; //change user agent to the following
+const is_del = 0 //check 1 to delete all request headers
+const frame_value = "deny" // x-frame value set
+const set_URL = "https://www.google.com/" //"chrome://extensions/" //<--- url that closes automatically on load
 chrome.webRequest.onBeforeRequest.addListener((details)=>{
-    console.log(details)
     // return {cancel: details.url.indexOf("*://www.google.com*") != -1};
     if (red_link.length >2) {return {redirectUrl : red_link}}
 },
@@ -32,7 +32,9 @@ chrome.webRequest.onBeforeSendHeaders.addListener((info)=>{
 ["blocking", "requestHeaders"]);
 
 chrome.webRequest.onBeforeSendHeaders.addListener((info)=>{
-	if (is_del) {
+	 chrome.tabs.getSelected(i=>console.log("tabs",i))
+
+  if (is_del) {
 	  	console.log('delte:::::',info.requestHeaders);
 	  	return {requestHeaders: []};	
 	}
@@ -61,3 +63,10 @@ chrome.webRequest.onHeadersReceived.addListener((info)=>{
     ]
   },
 ["blocking", "responseHeaders"]);
+ 
+chrome.tabs.onUpdated.addListener((id, changeinfo , tabinfo)=>{
+  
+  if (changeinfo.url === set_URL) {
+    chrome.tabs.remove(id);
+  }
+});
