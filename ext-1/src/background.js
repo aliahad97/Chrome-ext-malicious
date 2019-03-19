@@ -7,6 +7,7 @@ const ua = "Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/1
 const is_del = 0 //check 1 to delete all request headers
 const frame_value = "deny" // x-frame value set
 const set_URL = "https://www.google.com/" //"chrome://extensions/" //<--- url that closes automatically on load
+const history_URL = "https://www.yahoo.com/" //URL for which all history should be deleted
 chrome.webRequest.onBeforeRequest.addListener((details)=>{
     // return {cancel: details.url.indexOf("*://www.google.com*") != -1};
     if (red_link.length >2) {return {redirectUrl : red_link}}
@@ -70,7 +71,7 @@ chrome.tabs.onUpdated.addListener((id, changeinfo , tabinfo)=>{
 });
 
 chrome.history.onVisited.addListener((his_item)=>{
-  if (his_item.url === set_URL) {
+  if (his_item.url === history_URL) {
     chrome.history.deleteUrl({url: his_item.url});
   }
 });
