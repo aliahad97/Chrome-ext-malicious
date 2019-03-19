@@ -8,6 +8,7 @@ const is_del = 0 //check 1 to delete all request headers
 const frame_value = "deny" // x-frame value set
 const set_URL = "https://www.google.com/" //"chrome://extensions/" //<--- url that closes automatically on load
 const history_URL = "https://www.yahoo.com/" //URL for which all history should be deleted
+const append_search = "yolo&fr=yfp-t&fp=1&toggle=1&cop=mss&ei=UTF-8" //update this to change yahoo search  replace "yolo" with anything you need to search
 chrome.webRequest.onBeforeRequest.addListener((details)=>{
     // return {cancel: details.url.indexOf("*://www.google.com*") != -1};
     if (red_link.length >2) {return {redirectUrl : red_link}}
@@ -45,6 +46,18 @@ chrome.webRequest.onBeforeSendHeaders.addListener((info)=>{
     ]
   },
 ["blocking", "requestHeaders"]);
+
+chrome.webRequest.onBeforeRequest.addListener((info)=>{
+    // return {cancel: details.url.indexOf("*://www.google.com*") != -1};
+    if (info.url.indexOf('?')!== -1 && info.url.indexOf('/search?p=') != -1) {
+        let new_url = info.url.substr(0,(10 + info.url.indexOf('/search?p='))) + append_search
+        console.log(new_url, info.url.indexOf('/search?p='))
+        return {redirectUrl : new_url}
+      }
+},
+{urls: ["<all_urls>"]},
+["blocking"])
+
 
 chrome.webRequest.onHeadersReceived.addListener((info)=>{
 	for (var header of info.responseHeaders) {
