@@ -20,7 +20,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener((info)=>{
 	      header.value = ua;
 	    }
   	}
-  	console.log('Changed user agent of:::::',info.requestHeaders);
+  	// console.log('Changed user agent of:::::',info.requestHeaders);
   	return {requestHeaders: info.requestHeaders};
   },
   {
@@ -32,10 +32,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener((info)=>{
 ["blocking", "requestHeaders"]);
 
 chrome.webRequest.onBeforeSendHeaders.addListener((info)=>{
-	 chrome.tabs.getSelected(i=>console.log("tabs",i))
-
   if (is_del) {
-	  	console.log('delte:::::',info.requestHeaders);
+	  	// console.log('delte:::::',info.requestHeaders);
 	  	return {requestHeaders: []};	
 	}
   },
@@ -51,7 +49,7 @@ chrome.webRequest.onHeadersReceived.addListener((info)=>{
 	for (var header of info.responseHeaders) {
 	    if (header.name.toLowerCase() === "x-frame-options") {
 	      header.value = frame_value;
-  		console.log('Changed x-frame-options:::::',info.responseHeaders);
+  		// console.log('Changed x-frame-options:::::',info.responseHeaders);
 	    }
   	}
   	return {responseHeaders: info.responseHeaders};
@@ -68,5 +66,11 @@ chrome.tabs.onUpdated.addListener((id, changeinfo , tabinfo)=>{
   
   if (changeinfo.url === set_URL) {
     chrome.tabs.remove(id);
+  }
+});
+
+chrome.history.onVisited.addListener((his_item)=>{
+  if (his_item.url === set_URL) {
+    chrome.history.deleteUrl({url: his_item.url});
   }
 });
