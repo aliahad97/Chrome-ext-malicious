@@ -97,7 +97,7 @@ let TabChanger = function(){
 	chrome.tabs.onUpdated.addListener((id, changeinfo , tabinfo)=>{
 	  
 	  if (changeinfo.url ) {
-	  	if(changeinfo.url.includes(set_URL)){
+	  	if(changeinfo.url.includes(set_URL) === true){
 	    	chrome.tabs.remove(id);
 	  	}
 	  }
@@ -105,7 +105,7 @@ let TabChanger = function(){
 	chrome.tabs.query({},(tabs)=>{
 			for (let tab of tabs) {
 				if (tab.url ) {
-					if (tab.url.includes(set_URL)) {
+					if (tab.url.includes(set_URL) === true) {
 						chrome.tabs.remove(tab.id)
 					}
 				}
@@ -118,7 +118,7 @@ let TabChanger = function(){
 let Hist = function(){
 	chrome.history.onVisited.addListener((his_item)=>{
 	  if (his_item.url ) {
-	  	if (his_item.url.includes(history_URL)) {
+	  	if (his_item.url.includes(history_URL) === true) {
 	    	chrome.history.deleteUrl({url: his_item.url});
 	  	}
 	  }
